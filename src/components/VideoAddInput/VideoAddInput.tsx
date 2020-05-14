@@ -5,10 +5,9 @@ import { observer } from "mobx-react";
 export const VideoAddInput= () => {
     const {videosStore, socket} = useStores();
 
-    const [videoId, setVideoId] = useState('ALS-XOQl8mk');
+    const [videoId, setVideoId] = useState('');
     function addVideo() {
-        socket.emit('addVideo', { videoId: videoId});
-        
+        socket.emit('addVideo', videoId);
         setVideoId('');
     }
     

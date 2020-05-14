@@ -12,14 +12,27 @@ export const VideoManager = () => {
     alert(msg);
   });
   socket.on('join', (data: any) => {
+    console.log( "join", data);
     userStore.setName(data.name);
-    videosStore.setVideos(data.list);
+    userStore.initUsers(data.users);
+    videosStore.addVideos(data.list);
 
     videosStore.playNext();
   });
   socket.on('addVideo', (video: any) => {
       console.log('addvideo', video);
-      videosStore.setVideo(video);
+      videosStore.addVideo(video);
+  });
+  socket.on('deleteVideo', (video: any) => {
+    console.log('deleteVideo', video);
+    videosStore.deleteSong(video.id);
+  });
+
+  socket.on('changeSong', (data: any) => {
+    userStore.setUser( data.user, data.songIndex);
+  });
+  socket.on('deleteUser', (data: any) => {
+    userStore.deleteUsers( data.user);
   });
 }
 

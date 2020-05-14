@@ -14,16 +14,29 @@ export default class VideoStore {
   }
 
   @action
-  setVideo(video: any): void {
+  addVideo(video: any): void {
     this.videos.push( video);
   }
   @action
-  setVideos(videos: any): void {
+  addVideos(videos: any): void {
     this.videos = videos;
   }
   @action
   disableSong(index: number): void {
-    this.videos[index].disable = true;
+    this.videos[index].disable = !this.videos[index].disable;
+  }
+  @action
+  deleteSong(videoId: string): void {
+    const itemToFind = this.videos.find(function(item) {
+      return item.id == videoId;
+    })
+    const idx = this.videos.indexOf(itemToFind) 
+    if (idx > -1) 
+    {
+      this.videos[idx].delete = true;
+      //this.videos.splice(idx, 1);
+      console.log("delete", idx);
+    }
   }
   get getCurIndex(): number {
     return this.curIndex;
@@ -31,21 +44,22 @@ export default class VideoStore {
   get getCurVideoId(): string {
     return this.curVideoID;
   }
+  
   playNext(): void {
     let cnt=0;
     while(cnt<100) {
       cnt++;
       this.curIndex = (this.curIndex + 1) % this.videos.length;
-      if(!this.videos[ this.curIndex].disable) {
+      if(!this.videos[ this.curIndex].disable && !this.videos[ this.curIndex].delete) {
         break;
       }
     }
     if(cnt==100) {
       alert("NO SONG")
+      return;
     }
-    else {
-      this.curVideoID = this.videos[ this.curIndex].id;
-    }
+
+    this.curVideoID = this.videos[ this.curIndex].id;
   }
   playSong(index: number): void {
     this.curIndex = index;

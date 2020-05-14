@@ -5,7 +5,7 @@ import { useStores } from '../../hooks/use-stores'
 
 const Player = observer(() => {
     
-    const {videosStore} = useStores();
+    const {videosStore, socket} = useStores();
     const opts = {
         height: '390',
         width: '640',
@@ -19,9 +19,15 @@ const Player = observer(() => {
         videosStore.playNext();
     }
     function _onReady(event: any) {
-        console.log( event);
+        console.log( "_onReady", event);
         event.target.pauseVideo();
     }
+    function _onError(event: any) {
+        console.log('onError', event);
+        videosStore.playNext();
+    }
+
+    socket.emit('changeSong', videosStore.getCurIndex);
 
     // autoplay
   return (
@@ -31,6 +37,7 @@ const Player = observer(() => {
         video={videosStore.getCurVideoId}
         onReady={_onReady}
         onEnd={_onEnd}
+        onError={_onError}
         autoplay/>
   );
 });

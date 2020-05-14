@@ -24,6 +24,8 @@ export const UserInput= () => {
         <h2>Share your music</h2>
         <input type="text" placeholder="닉네임을 입력하세요" value={name} onChange={inputChange}/>
         <button onClick={addName}>Log In</button>
+        <br/><br/>
+        <img src="main.png" />
         </>
     )
 }
