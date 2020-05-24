@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useStores } from '../../hooks/use-stores'
 import { observer } from "mobx-react";
 import styled from "styled-components"
@@ -10,6 +10,13 @@ export const VideoView: React.FC<{ videos: any[] }> = observer(({ videos }) => {
     // return useObserver(() => {
       
     const {videosStore, socket, userStore} = useStores();
+    let items: Array<any> = [];
+    useEffect(() => {
+      if( !items[videosStore.getCurIndex]) return;
+      console.log( "items[videosStore.getCurIndex].", items[videosStore.getCurIndex]);
+      items[videosStore.getCurIndex].scrollIntoView();
+      //items[videosStore.getCurIndex].focus();
+    }, [videosStore.getCurIndex]);
       if (videos==null || !videos || videos.length == 0) return <ul></ul>;
       const Wrapper = styled.tr `
           text-align: left;
@@ -55,33 +62,42 @@ export const VideoView: React.FC<{ videos: any[] }> = observer(({ videos }) => {
       }
 
       return (
-        <table style={{width: '730px', marginTop: '10px'}}>
-        { videos && videos.length > 0 && videos.map( (video, index) => 
-          <Wrapper style={
-            video.delete? {display: 'none'}:
-              video.disable? {textDecoration: 'line-through'}:{}
-          }>
-            <StyledIndex>{ index==videosStore.getCurIndex? 'NOW' : index+1}</StyledIndex>
-            <td onClick={() => playSong(index)}>
-            <StyledAdder>{video.adder} 님이 추가하신 노래</StyledAdder>
-            <StyledTitle>{video.title}</StyledTitle>
-            <StyledUsers>{ userStore.getUsersByIndex[index] && userStore.getUsersByIndex[index].join(", ") + "님이 듣고 있어요"}</StyledUsers>
-            </td>
-            { 
-              video.adder == userStore.getName && 
-              <td onClick={() => deleteSong(video.id)}>
-                X
-              </td>
-            }
-            { 
-              video.adder != userStore.getName && 
-              <td onClick={() => disableSong(index)}>
-                <VisibilityOffIcon></VisibilityOffIcon>
-              </td>
-            }
-          </Wrapper>
-        )}
-        </table>
+        <div  style={{}}>
+          <div style={{fontSize: '20px', fontWeight: 'bold', color: 'chartreuse', textAlign: 'center'}}>
+            Play List
+          </div>
+          <div  style={{height: '710px', overflowY: 'scroll'}}>
+            <table style={{width: '730px', marginTop: '10px'}}>
+            { videos && videos.length > 0 && videos.map( (video, index) => 
+              <Wrapper 
+                ref={(item: any)=> { items[index] = item }}
+                style={
+                video.delete? {display: 'none'}:
+                  video.disable? {textDecoration: 'line-through'}:{}
+              }>
+                <StyledIndex>{ index==videosStore.getCurIndex? '>' : index+1}</StyledIndex>
+                <td onClick={() => playSong(index)}>
+                <StyledAdder>{video.adder} 님이 추가하신 노래</StyledAdder>
+                <StyledTitle>{video.title}</StyledTitle>
+                <StyledUsers>{ userStore.getUsersByIndex[index] && userStore.getUsersByIndex[index].join(", ") + "님이 듣고 있어요"}</StyledUsers>
+                </td>
+                { 
+                  video.adder == userStore.getName && 
+                  <td onClick={() => deleteSong(video.id)}>
+                    X
+                  </td>
+                }
+                { 
+                  video.adder != userStore.getName && 
+                  <td onClick={() => disableSong(index)}>
+                    <VisibilityOffIcon></VisibilityOffIcon>
+                  </td>
+                }
+              </Wrapper>
+            )}
+            </table>
+          </div>
+        </div>
       )
   })
   
