@@ -7,7 +7,6 @@ export const UserInput= () => {
 
     const [name, setName] = useState('');
     function addName() {
-        console.log("name", name);
         if(!name) {
             alert('no name');
         }

@@ -15,15 +15,12 @@ const Player = observer(() => {
     };
     
     function _onEnd(event: any) {
-        console.log( event);
         videosStore.playNext();
     }
     function _onReady(event: any) {
-        console.log( "_onReady", event);
         event.target.pauseVideo();
     }
     function _onError(event: any) {
-        console.log('onError', event);
         videosStore.playNext();
     }
 

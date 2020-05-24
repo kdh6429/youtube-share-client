@@ -35,7 +35,6 @@ export default class VideoStore {
     {
       this.videos[idx].delete = true;
       //this.videos.splice(idx, 1);
-      console.log("delete", idx);
     }
   }
   get getCurIndex(): number {

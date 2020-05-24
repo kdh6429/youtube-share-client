@@ -38,11 +38,9 @@ export default class UserStore {
     if(!this.users) return {};
     
     for (const [user, index] of Object.entries(this.users)) {
-      console.log(user, index);
       if (!usersByIndex[index as number]) usersByIndex[index as number] = [];
       usersByIndex[index as number].push(user);
     }
-    console.log( "usersByIndex", usersByIndex);
     return usersByIndex
   }
 }

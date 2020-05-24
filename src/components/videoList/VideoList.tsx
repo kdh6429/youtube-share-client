@@ -13,7 +13,6 @@ export const VideoView: React.FC<{ videos: any[] }> = observer(({ videos }) => {
     let items: Array<any> = [];
     useEffect(() => {
       if( !items[videosStore.getCurIndex]) return;
-      console.log( "items[videosStore.getCurIndex].", items[videosStore.getCurIndex]);
       items[videosStore.getCurIndex].scrollIntoView();
       //items[videosStore.getCurIndex].focus();
     }, [videosStore.getCurIndex]);
